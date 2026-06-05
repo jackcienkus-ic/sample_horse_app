@@ -1,0 +1,43 @@
+name: build
+on: push
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v6
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: 21
+          cache: 'gradle'
+      - name: "build"
+        run: ./gradlew build
+
+  cloud-sql-migrate:
+    runs-on: ubuntu-latest
+    needs: [ run-tests ]
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v6
+      - name: Migrate Cloud SQL
+        run: echo "todo - migrate cloud sql"
+
+  cloud-run-deploy:
+    runs-on: ubuntu-latest
+    needs: [ cloud-sql-migrate ]
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v6
+      - name: Deploy Google Cloud Run
+        run: echo "todo - deploy google cloud run"
