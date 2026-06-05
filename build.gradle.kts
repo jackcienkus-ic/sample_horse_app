@@ -16,6 +16,10 @@ subprojects {
 
     apply(plugin = "kotlin")
 
+    configure<org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension> {
+        jvmToolchain(21)
+    }
+
     repositories {
         mavenCentral()
     }
