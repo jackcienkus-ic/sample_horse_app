@@ -1,22 +1,22 @@
 package org.chr.watchduty
 
-class WatchDutyService() {
-    fun latest(): List<WatchDutyEvent> {
+import kotlinx.serialization.json.Json
 
-        // todo -
-        // load from resources dir
-        // load from http client
-        return listOf(
-            WatchDutyEvent(
-                id = "1",
-                type = "earthquake",
-                name = "Earthquake in California"
-            ),
-            WatchDutyEvent(
-                id = "2",
-                type = "flood",
-                name = "Flood in Texas"
-            )
-        )
+
+class WatchDutyService() {
+    fun latestResources(): List<WatchDutyEvent> {
+        val rawFires = WatchDutyJsonToString().readJSONFromResources("latest.json")
+            ?: error("Could not read latest.json")
+
+        val json = Json { ignoreUnknownKeys = true }
+        val fires = json.decodeFromString<List<WatchDutyEvent>>(rawFires)
+        return fires
     }
+
+    fun latestHTTP(): List<WatchDutyEvent> {
+        val fireData = HTMLPull.getFires("https://api.watchduty.org/api/v1/geo_events/?geo_event_types=wildfire,location")
+        val json = Json { ignoreUnknownKeys = true }
+        val fires = json.decodeFromString<List<WatchDutyEvent>>(fireData)
+        return fires
+        }
 }

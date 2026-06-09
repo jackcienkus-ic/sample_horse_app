@@ -10,7 +10,7 @@ class Application() {
 
     fun extracted(): List<WatchDutyEvent> {
         val service = WatchDutyService()
-        val latest = service.latest()
+        val latest = service.latestHTTP()
         println("Fetched latest watch duty data")
         return latest
     }
