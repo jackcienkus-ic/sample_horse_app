@@ -1,7 +1,11 @@
 package org.chr.watchduty
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class WatchDutyEvent(
-    val id: String,
-    val type: String,
-    val name: String
+    @SerialName("external_id") val id: String? = null,
+    @SerialName("geo_event_type") val type: String? = null,
+    @SerialName("name") val name: String? = null,
 )

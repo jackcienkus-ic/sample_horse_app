@@ -8,8 +8,8 @@ class Application() {
     // introduce ktor
     // introduce the database
 
-    fun extracted(): List<WatchDutyEvent> {
-        val service = WatchDutyService()
+    fun extracted(baseUrl: String): List<WatchDutyEvent> {
+        val service = WatchDutyService(baseUrl)
         val latest = service.latest()
         println("Fetched latest watch duty data")
         return latest
@@ -18,5 +18,5 @@ class Application() {
 
 fun main() {
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
-    Application().extracted()
+    Application().extracted("https://api.watchduty.org")
 }
