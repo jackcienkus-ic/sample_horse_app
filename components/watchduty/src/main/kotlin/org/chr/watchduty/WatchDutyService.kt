@@ -13,12 +13,9 @@ class WatchDutyService(
     private val json = Json { ignoreUnknownKeys = true }
 
     fun latest(): List<WatchDutyEvent> {
-        val uri = URI.create(baseUrl).resolve("/api/v1/geo_events/?geo_event_types=wildfire,location")
+        val uri = URI.create("https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Incident_Locations_Current/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson")
         val request = HttpRequest.newBuilder()
             .uri(uri)
-            .header("Accept", "application/json")
-            .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36")
-            .header("Accept-Language", "en-US,en;q=0.9")
             .build()
 
         val response = client.send(request, BodyHandlers.ofString())
@@ -28,6 +25,6 @@ class WatchDutyService(
             throw RuntimeException("Failed to fetch latest watch duty events: ${response.statusCode()} - $body")
         }
 
-        return json.decodeFromString<List<WatchDutyEvent>>(body)
+        return json.decodeFromString<FeatureCollection>(body).features
     }
 }
