@@ -19,8 +19,6 @@ class WatchDutyServiceTest() {
         assertEquals(393, latest.size)
     }
 
-
-
     @Test
     fun testLatest() {
         fake.start()

@@ -8,4 +8,6 @@ kotlin {
 
 dependencies {
     implementation(project(":components:watchduty"))
+    testImplementation(project(":components:test-fake-server"))
+    implementation(project(":components:test-server"))
 }
