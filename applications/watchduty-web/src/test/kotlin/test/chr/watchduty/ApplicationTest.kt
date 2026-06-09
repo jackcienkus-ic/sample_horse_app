@@ -8,7 +8,7 @@ class ApplicationTest {
 
     @Test
     fun testApplication() {
-        val extracted = Application().extracted()
+        val extracted = Application().extracted("https://api.watchduty.org")
         assertNotNull(extracted)
     }
 }
