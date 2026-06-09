@@ -12,7 +12,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ApplicationTest {
-    @Ignore
     @Test
     fun `test root endpoint`() = testApplication {
         application {
@@ -21,7 +20,7 @@ class ApplicationTest {
         }
         assertEquals(HttpStatusCode.OK, client.get("/").status)
     }
-
+    @Ignore
     @Test
     fun `test html freemarker endpoint`() = testApplication {
         application {
