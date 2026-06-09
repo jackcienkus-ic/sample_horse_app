@@ -1,21 +1,52 @@
 package test.chr.watchduty
 
-import org.chr.watchduty.Application
+import io.ktor.client.request.*
+import io.ktor.http.*
+import io.ktor.server.testing.*
+import org.chr.watchduty.WatchDutyService
+import org.chr.watchduty.configureFreemarker
+import org.chr.watchduty.configureRouting
 import java.net.ServerSocket
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ApplicationTest {
-    private val port = ServerSocket(0).use { it.localPort }
-    private val fake = FakeService(port)
 
     @Test
-    fun testApplication() {
+    fun `test root endpoint`() = testApplication {
+        application {
+            configureFreemarker()
+            configureRouting(WatchDutyService("http://unused"))
+        }
+        assertEquals(HttpStatusCode.OK, client.get("/").status)
+    }
+
+    @Test
+    fun `test html freemarker endpoint`() = testApplication {
+        application {
+            configureFreemarker()
+            configureRouting(WatchDutyService("http://unused"))
+        }
+        assertEquals(HttpStatusCode.OK, client.get("/html-freemarker").status)
+    }
+
+    @Test
+    fun `test fires endpoint`() {
+        val port = ServerSocket(0).use { it.localPort }
+        val fake = FakeService(port)
         fake.start()
 
-        val latest = Application().extracted("http://localhost:$port")
-        assertEquals(393, latest.size)
-
-        fake.stop()
+        try {
+            testApplication {
+                application {
+                    configureFreemarker()
+                    configureRouting(WatchDutyService("http://localhost:$port"))
+                }
+                assertEquals(HttpStatusCode.OK, client.get("/fires").status)
+                assertEquals(HttpStatusCode.OK, client.get("/fires?region=100").status)
+            }
+        } finally {
+            fake.stop()
+        }
     }
 }
