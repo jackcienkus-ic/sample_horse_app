@@ -1,12 +1,11 @@
 package org.chr.watchduty
 
 fun main() {
-    val test = WatchDutyService().latestHTTP()
+    val test = WatchDutyService("https://api.watchduty.org").latestHTTP()
     println(test)
     val tester = test.filter {
         EventClassification().isInColorado(it.lat!!, it.lng!!, 50.0)
     }
-    val fireList: MutableList<WatchDutyEvent> = mutableListOf()
     for (fire in tester) {
         fire.county=EventClassification().assignCounty(fire)
     }

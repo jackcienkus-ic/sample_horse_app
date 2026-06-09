@@ -1,10 +1,13 @@
 plugins {
-    kotlin("jvm")
     id("org.jetbrains.kotlin.plugin.serialization")
+    kotlin("jvm") version "2.3.20"
+
+}
+
+kotlin {
+    jvmToolchain(21)
 }
 
 dependencies {
-    testImplementation(project(":components:test-fake-server"))
     implementation(project(":components:test-server"))
-
 }
