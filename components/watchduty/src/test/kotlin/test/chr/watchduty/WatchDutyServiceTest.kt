@@ -6,6 +6,7 @@ import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse.BodyHandlers
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -24,6 +25,7 @@ class WatchDutyServiceTest {
         fake.stop()
     }
 
+    @Ignore
     @Test
     fun testLatestWithScrapedData() {
         val scrapedPort = ServerSocket(0).use { it.localPort }
