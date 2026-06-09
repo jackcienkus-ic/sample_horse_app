@@ -12,7 +12,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ApplicationTest {
-    @Ignore
     @Test
     fun `test root endpoint`() = testApplication {
         application {
@@ -21,7 +20,6 @@ class ApplicationTest {
         }
         assertEquals(HttpStatusCode.OK, client.get("/").status)
     }
-
     @Test
     fun `test html freemarker endpoint`() = testApplication {
         application {
@@ -30,7 +28,6 @@ class ApplicationTest {
         }
         assertEquals(HttpStatusCode.OK, client.get("/html-freemarker").status)
     }
-
     @Test
     fun `test fires endpoint`() {
         val port = ServerSocket(0).use { it.localPort }
