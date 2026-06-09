@@ -36,16 +36,21 @@ fun Application.configureRouting(service: WatchDutyService) {
                     lat in (36.99 - (mileDiff / 69.1))..(41.00 + (mileDiff / 69.1)) &&
                         lng in (-109.05 - (mileDiff / (69.17 * cos(lat))))..(-102.05 + (mileDiff / (69.17 * cos(lat))))
                 }
+            for (fire in fires) {
+                fire.county=EventClassification().assignCounty(fire)
+            }
+            val firesWithCounties = fires
                 .map { event ->
                     Fire(
                         name = event.name ?: "Unknown",
                         size = event.data?.acreage,
                         lat = event.lat,
                         lng = event.lng,
+                        county = event.county
                     )
                 }
 
-            call.respond(FreeMarkerContent("fires.ftl", mapOf("data" to fires, "region" to region), ""))
+            call.respond(FreeMarkerContent("fires.ftl", mapOf("data" to firesWithCounties, "region" to region), ""))
         }
     }
 }

@@ -123,6 +123,7 @@
                 <th>Acreage</th>
                 <th>Latitude</th>
                 <th>Longitude</th>
+                <th>County</th>
             </tr>
         </thead>
         <tbody>
@@ -138,6 +139,7 @@
                 </td>
                 <td class="coords">${item.lat}</td>
                 <td class="coords">${item.lng}</td>
+                <td class="county">${item.county}</td>
             </tr>
         </#list>
         </tbody>
