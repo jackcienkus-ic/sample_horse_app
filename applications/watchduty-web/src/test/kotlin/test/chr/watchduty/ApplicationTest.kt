@@ -20,7 +20,6 @@ class ApplicationTest {
         }
         assertEquals(HttpStatusCode.OK, client.get("/").status)
     }
-    @Ignore
     @Test
     fun `test html freemarker endpoint`() = testApplication {
         application {
@@ -29,7 +28,7 @@ class ApplicationTest {
         }
         assertEquals(HttpStatusCode.OK, client.get("/html-freemarker").status)
     }
-
+    @Ignore
     @Test
     fun `test fires endpoint`() {
         val port = ServerSocket(0).use { it.localPort }
