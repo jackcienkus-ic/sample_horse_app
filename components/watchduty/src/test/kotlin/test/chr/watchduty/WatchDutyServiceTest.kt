@@ -8,6 +8,7 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
+
 class WatchDutyServiceTest() {
 
     @Test
@@ -26,7 +27,7 @@ class WatchDutyServiceTest() {
             .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36")
             .header("Accept-Language", "en-US,en;q=0.9")
             .build()
-
-        assertEquals(200, request.hashCode())
+        val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+        assertEquals(200, response.statusCode())
     }
 }
