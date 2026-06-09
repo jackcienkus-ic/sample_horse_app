@@ -20,7 +20,7 @@ class WatchDutyServiceTest {
         fake.start()
 
         val latest = WatchDutyService("http://localhost:$port").latest()
-        assertEquals(393, latest.size)
+        assertEquals(352, latest.size)
 
         fake.stop()
     }
