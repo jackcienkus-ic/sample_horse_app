@@ -1,10 +1,8 @@
 package test.chr.watchduty
 
 import org.chr.watchduty.Application
-import org.chr.watchduty.WatchDutyService
 import java.net.ServerSocket
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 
