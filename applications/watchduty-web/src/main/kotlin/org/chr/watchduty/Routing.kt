@@ -28,7 +28,7 @@ fun Application.configureRouting(service: WatchDutyService) {
                 "Missing or invalid parameter. Must be a valid Double."
             )
 
-            val events = service.latest()
+            val events = service.latest("https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Incident_Locations_Current/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson")
             val fires = events
                 .filter { event ->
                     val lat = event.lat

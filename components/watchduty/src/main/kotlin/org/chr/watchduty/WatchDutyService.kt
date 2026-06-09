@@ -12,8 +12,8 @@ class WatchDutyService(
 ) {
     private val json = Json { ignoreUnknownKeys = true }
 
-    fun latest(): List<WatchDutyEvent> {
-        val uri = URI.create("https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Incident_Locations_Current/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson")
+    fun latest(url: String = "https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Incident_Locations_Current/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson"): List<WatchDutyEvent> {
+        val uri = URI.create(url)
         val request = HttpRequest.newBuilder()
             .uri(uri)
             .build()
