@@ -10,7 +10,6 @@ import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import kotlin.test.assertNotNull
 
 class WatchDutyServiceTest {
     private val port = ServerSocket(0).use { it.localPort }
@@ -21,7 +20,7 @@ class WatchDutyServiceTest {
         val fake = FakeService(port, inputStream)
         fake.start()
 
-        val latest = WatchDutyService("http://localhost:$port").latest("http://localhost:$port/api/v1/geo_events")
+        val latest = WatchDutyService("http://localhost:$port").latest("http://localhost:$port/api/v1/geo_events", "NIFC")
         assertEquals(350, latest.size)
 
         fake.stop()
@@ -35,7 +34,7 @@ class WatchDutyServiceTest {
         val fake = FakeService(scrapedPort, scrapedBody)
         fake.start()
 
-        val latest = WatchDutyService("http://localhost:$scrapedPort").latest("https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Incident_Locations_Current/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson")
+        val latest = WatchDutyService("http://localhost:$scrapedPort").latest("https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Incident_Locations_Current/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson", "NIFC")
         assertTrue(latest.isNotEmpty(), "Expected scraped events to be non-empty")
 
         fake.stop()

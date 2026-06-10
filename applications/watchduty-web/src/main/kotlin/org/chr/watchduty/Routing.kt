@@ -28,15 +28,27 @@ fun Application.configureRouting(service: WatchDutyService) {
                 "Missing or invalid parameter. Must be a valid Double."
             )
 
-            val events = service.latest("https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Incident_Locations_Current/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson")
-            val fires = events
+            println("1")
+            val NIFCevents = service.latest("https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Incident_Locations_Current/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson", "NIFC")
+            println("2")
+            val WildWebEventsDurango = service.latest("https://snknmqmon6.execute-api.us-west-2.amazonaws.com/centers/CODRC/incidents", "Wild Web Durango")
+            val WildWebEventsMontrose = service.latest("https://snknmqmon6.execute-api.us-west-2.amazonaws.com/centers/COMTC/incidents", "Wild Web Montrose")
+            val fires = (NIFCevents+WildWebEventsDurango+WildWebEventsMontrose)
                 .filter { event ->
                     val lat = event.lat
                     val lng = event.lng
                     val latExpansion = mileDiff / 69.1
                     val lngExpansion = mileDiff / (69.17 * cos(Math.toRadians(lat)))
+                    val oneWeekAgo = System.currentTimeMillis() - 7L * 24 * 60 * 60 * 1000
+                    val discoveryTime = event.properties?.fireDiscoveryDateTime ?: event.date?.let {
+                        java.time.Instant.parse(it.replace(" ", "T") + "Z").toEpochMilli()
+                    }
+                    val isWildfire = event.properties?.incidentTypeCategory == "WF"
+                            || event.wildwebType == "Wildfire"
                     lat in (36.99 - latExpansion)..(41.00 + latExpansion) &&
-                            lng in (-109.05 - lngExpansion)..(-102.05 + lngExpansion)
+                            lng in (-109.05 - lngExpansion)..(-102.05 + lngExpansion) &&
+                            (discoveryTime == null || discoveryTime >= oneWeekAgo) &&
+                            isWildfire
                 }
                 .map { event ->
                     Fire(

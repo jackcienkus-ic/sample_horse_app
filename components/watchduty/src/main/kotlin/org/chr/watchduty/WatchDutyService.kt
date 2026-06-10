@@ -12,7 +12,7 @@ class WatchDutyService(
 ) {
     private val json = Json { ignoreUnknownKeys = true }
 
-    fun latest(url: String = "https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Incident_Locations_Current/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson"): List<WatchDutyEvent> {
+    fun latest(url: String, source: String): List<FireEvent> {
         val uri = URI.create(url)
         val request = HttpRequest.newBuilder()
             .uri(uri)
@@ -24,7 +24,16 @@ class WatchDutyService(
         if (response.statusCode() != 200) {
             throw RuntimeException("Failed to fetch latest watch duty events: ${response.statusCode()} - $body")
         }
-
-        return json.decodeFromString<FeatureCollection>(body).features
+        if (source == "NIFC") {
+            return json.decodeFromString<FeatureCollection>(body).features
+        } else if (source == "Wild Web Durango") {
+            return json.decodeFromString<List<WildWebCollection>>(body).flatMap { it.data }
+                .onEach { it.county = "La Plata" }
+        } else if (source == "Wild Web Montrose") {
+            return json.decodeFromString<List<WildWebCollection>>(body).flatMap { it.data }
+                .onEach { it.county = "Montrose" }
+        } else {
+            return json.decodeFromString<FeatureCollection>(body).features
+        }
     }
 }
